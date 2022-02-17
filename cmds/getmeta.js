@@ -4,7 +4,6 @@
   using the --type argument:
     'dimension', 'report', 'rptdefn', 'table' or 'attribForm'.
 */
-const ora = require('ora');
 const {getObject, getDimensionOutput, getReportOutput, getReportDefnOutput,
       getTableOutput, getAttribFormOutput}
   = require('../src/metadata');
@@ -21,7 +20,6 @@ module.exports = (args) => {
     error(`ERROR: invalid type -${type}- supplied; must be one of: ${validTypes}`);
     return;
   }
-  const spinner = ora().start();
   login(user, pswd)
   .then((res) => {
     return Promise.all(
@@ -44,11 +42,9 @@ module.exports = (args) => {
     }
   })
   .then((output) => {
-    spinner.stop();
     console.log(output);
   })
   .catch(err => {
-    spinner.stop();
     console.log('error:', err)
     error(`${err}`, true);
   });

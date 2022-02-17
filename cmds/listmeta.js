@@ -4,7 +4,6 @@
   using the --type argument: 'column', 'dataSet', 'dimension', 'report',
   'table' or 'type'.
 */
-const ora = require('ora');
 const {getColumns, getDatasets, getDimensions, getReports, getTables,
       getObjectTypes, getObjIdFromUri}
   = require('../src/metadata');
@@ -21,7 +20,6 @@ module.exports = (args) => {
     error(`ERROR: invalid type -${type}- supplied; must be one of: ${validTypes}`);
     return;
   }
-  const spinner = ora().start();
   login(user, pswd)
   .then((res) => {
     if (type === 'report')
@@ -38,7 +36,6 @@ module.exports = (args) => {
       return getObjectTypes(res.tempToken, wrkspc);
   })
   .then((data) => {
-    spinner.stop();
     console.log(`listing for: ${type}`);
     if (['column', 'dataSet', 'dimension', 'report', 'table'].includes(type) )
       data.query.entries.forEach(entry => {
@@ -52,7 +49,6 @@ module.exports = (args) => {
       })
   })
   .catch(err => {
-    spinner.stop();
     console.log('error:', err)
     error(`${err}`, true);
   });
